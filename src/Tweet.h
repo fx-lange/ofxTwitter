@@ -13,6 +13,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Poco/DateTime.h"
 
 struct TweetAuthor {
 	string name;
@@ -24,8 +25,8 @@ struct Tweet {
 
 	string id;
 	string link;
-	string published;
-	string updated;
+	Poco::DateTime published;
+	Poco::DateTime updated;
 	string title;
 	string language;
 	
@@ -37,8 +38,8 @@ struct Tweet {
 	string print() {
 		string str;
 		str += "id:" + id;
-		str +=  "\npublished:" + published;
-		str +=  "\nupdated:" +updated;
+		str +=  "\npublished:" + ofToString(published.year())+"/"+ofToString(published.month())+"/"+ofToString(published.day())+" " +ofToString(published.hour())+":"+ofToString(published.minute())+":"+ofToString(published.second());
+		str +=  "\nupdated:" + ofToString(updated.year())+"/"+ofToString(updated.month())+"/"+ofToString(updated.day())+" " +ofToString(updated.hour())+":"+ofToString(updated.minute())+":"+ofToString(updated.second());
 		str +=  "\nlanguage:" + language;
 		str +=  "\nauthor:name:" + author.name;
 		str +=  "\nauthor:uri:" + author.uri;

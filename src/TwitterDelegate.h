@@ -17,5 +17,5 @@
 
 class TwitterDelegate {
 public:
-	virtual void searchResult(vector<Tweet> results, int queryIdentifier) {}
+	virtual void searchResult(vector<Tweet> & results, int queryIdentifier)=0;
 };

@@ -30,20 +30,26 @@ public:
 	void setup();
 	void setSearchDelegate(TwitterDelegate *_delegate) { delegate = _delegate; }
 	
+	vector<Tweet> syncQuery(string query);
+	vector<Tweet> syncTwitterQuery(string keywords, Poco::DateTime since=Poco::DateTime(1970,1,1), int repliesPerPage=10, int pageIndex=1);
+
 	void startQuery(string query);
-	void startTwitterQuery(string keywords, int repliesPerPage=10, int pageIndex=1, int queryIdentifier=0);
+	void startTwitterQuery(string keywords, Poco::DateTime since=Poco::DateTime(1970,1,1), int repliesPerPage=10, int pageIndex=1, int queryIdentifier=0);
 	
+	string urlForTwitterQuery(string keywords, Poco::DateTime since=Poco::DateTime(1970,1,1), int repliesPerPage=10, int pageIndex=1);
+
 	vector<Tweet> getLatestResponse();
 	void newResponse(ofxHttpResponse &response);
     
     void clear();
+    void setTimeout(int seconds);
 
 	ofxHttpUtils httpUtils;
     
     int tweetQueryIdentifier;
     
 private:
-	
+    vector<Tweet> processResponse(const ofxHttpResponse & response);
 	TwitterDelegate *delegate;
 	
 	ofxXmlSettings xml;
