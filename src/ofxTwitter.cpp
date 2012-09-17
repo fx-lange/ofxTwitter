@@ -44,7 +44,7 @@ vector<Tweet> ofxTwitter::syncTwitterQuery(string keywords, Poco::DateTime since
 
 string ofxTwitter::urlForTwitterQuery(string keywords, Poco::DateTime since, int repliesPerPage, int pageIndex){
 	string query = "http://search.twitter.com/search.atom?q=";
-	Poco::URI::encode(keywords,"#@",query);
+	Poco::URI::encode(keywords,"#@ ",query);
 	query += "&amp;rpp=" + ofToString(repliesPerPage);
 	query += "&amp;page=" + ofToString(pageIndex);
 	query += "&amp;include_entities=true";
