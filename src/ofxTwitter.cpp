@@ -18,6 +18,7 @@
 #include "Poco/DateTimeParser.h"
 #include "Poco/DateTimeFormatter.h"
 #include "Poco/DateTimeFormat.h"
+#include "Poco/URI.h"
 
 void ofxTwitter::setup() {
 	
