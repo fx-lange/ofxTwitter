@@ -114,6 +114,7 @@ vector<Tweet> ofxTwitter::processResponse(const ofxHttpResponse & response){
 		Poco::DateTimeParser::parse(xml.getValue("published", "", 0),tweet.published,timeZoneDiff);
 		tweet.author.uri  = xml.getValue("author:uri", "", 0).c_str();
 		tweet.author.name = xml.getValue("author:name", "", 0).c_str();
+		tweet.author.username = ofSplitString(tweet.author.name," ")[0];
 
 		//tweet.language = xml.getValue("twitter:lang", "", 0).c_str();
 

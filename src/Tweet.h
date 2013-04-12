@@ -17,6 +17,7 @@
 
 struct TweetAuthor {
 	string name;
+	string username;
 	string uri;
 	string imageUri;
 };
