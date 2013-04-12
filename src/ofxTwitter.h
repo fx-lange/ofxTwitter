@@ -32,11 +32,16 @@ public:
 	
 	vector<Tweet> syncQuery(string query);
 	vector<Tweet> syncTwitterQuery(string keywords, Poco::DateTime since=Poco::DateTime(1970,1,1), int repliesPerPage=10, int pageIndex=1);
+	vector<Tweet> syncTwitterQuery(string keywords, string since_id, int repliesPerPage=10, int pageIndex=1);
+
 
 	void startQuery(string query);
 	void startTwitterQuery(string keywords, Poco::DateTime since=Poco::DateTime(1970,1,1), int repliesPerPage=10, int pageIndex=1, int queryIdentifier=0);
+	void startTwitterQuery(string keywords, string since_id = "", int repliesPerPage=10, int pageIndex=1, int queryIdentifier=0);
+
 	
 	string urlForTwitterQuery(string keywords, Poco::DateTime since=Poco::DateTime(1970,1,1), int repliesPerPage=10, int pageIndex=1);
+	string urlForTwitterQuery(string keywords, string sind_id, int repliesPerPage=10, int pageIndex=1);
 
 	vector<Tweet> getLatestResponse();
 	void newResponse(ofxHttpResponse &response);

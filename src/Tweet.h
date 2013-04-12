@@ -24,6 +24,7 @@ struct TweetAuthor {
 struct Tweet {
 
 	string id;
+	string last_id; //to query all tweets since last_id (since_id=last_id)
 	string link;
 	Poco::DateTime published;
 	Poco::DateTime updated;

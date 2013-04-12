@@ -39,22 +39,36 @@ vector<Tweet> ofxTwitter::syncQuery(string query){
 }
 
 vector<Tweet> ofxTwitter::syncTwitterQuery(string keywords, Poco::DateTime since, int repliesPerPage, int pageIndex){
-	return syncQuery(urlForTwitterQuery(keywords,repliesPerPage,pageIndex));
+	return syncQuery(urlForTwitterQuery(keywords,since,repliesPerPage,pageIndex));
 }
 
+vector<Tweet> ofxTwitter::syncTwitterQuery(string keywords, string since_id, int repliesPerPage, int pageIndex){
+	return syncQuery(urlForTwitterQuery(keywords,since_id,repliesPerPage,pageIndex));
+}
 
-string ofxTwitter::urlForTwitterQuery(string keywords, Poco::DateTime since, int repliesPerPage, int pageIndex){
+string ofxTwitter::urlForTwitterQuery(string keywords, string since_id, int repliesPerPage, int pageIndex){
 	string query = "http://search.twitter.com/search.atom?q=";
 	Poco::URI::encode(keywords,"#@ ",query);
 	query += "&amp;rpp=" + ofToString(repliesPerPage);
 	query += "&amp;page=" + ofToString(pageIndex);
 	query += "&amp;include_entities=true";
 	query += "&amp;result_type=recent";
-	if(since>Poco::DateTime(1970,1,1)){
-		query += "&amp;since_id" + Poco::DateTimeFormatter::format(since,Poco::DateTimeFormat::RFC1036_FORMAT );
+	if(since_id!=""){
+		query += "&amp;since_id=" + since_id;
 	}
 
+	cout << query << endl;
+
 	return query;
+}
+
+string ofxTwitter::urlForTwitterQuery(string keywords, Poco::DateTime since, int repliesPerPage, int pageIndex){
+	string since_id = "";
+	if(since>Poco::DateTime(1970,1,1)){
+		since_id = Poco::DateTimeFormatter::format(since,Poco::DateTimeFormat::RFC1036_FORMAT );
+	}
+
+	return urlForTwitterQuery(keywords,since_id,repliesPerPage,pageIndex);
 }
 
 void ofxTwitter::startTwitterQuery(string keywords, Poco::DateTime since, int repliesPerPage, int pageIndex, int queryIdentifier) {
@@ -62,6 +76,13 @@ void ofxTwitter::startTwitterQuery(string keywords, Poco::DateTime since, int re
     tweetQueryIdentifier = queryIdentifier;
     
 	startQuery(urlForTwitterQuery(keywords,since,repliesPerPage,pageIndex));
+}
+
+void ofxTwitter::startTwitterQuery(string keywords, string since_id, int repliesPerPage, int pageIndex, int queryIdentifier) {
+
+    tweetQueryIdentifier = queryIdentifier;
+
+	startQuery(urlForTwitterQuery(keywords,since_id,repliesPerPage,pageIndex));
 }
 
 
@@ -85,6 +106,8 @@ vector<Tweet> ofxTwitter::processResponse(const ofxHttpResponse & response){
 
 		Tweet tweet;
 		tweet.id = xml.getValue("id", "", 0).c_str();
+		vector<string> split = ofSplitString(tweet.id,":");
+		tweet.last_id = split[split.size()-1];
 		tweet.title = xml.getValue("title", "", 0).c_str();
 		int timeZoneDiff;
 		Poco::DateTimeParser::parse(xml.getValue("updated", "", 0),tweet.updated,timeZoneDiff);
